@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>كتالوج أسيل نت - كروت وبطاقات الإنترنت الرقمية</title>
+  
+  <!-- SEO & Social Meta Tags -->
+  <meta name="description" content="كتالوج وبطاقات شبكة أسيل نت للإنترنت اللاسلكي، متزامن تلقائياً وبشكل فوري مع Google Sheets ومستضاف على GitHub Pages.">
+  <meta name="theme-color" content="#070d19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-wrapper">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+              <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+          </div>
+          <div class="brand-info">
+            <h1 id="brand-name">أسيل نت</h1>
+            <p>كتالوج البطاقات الرقمية ومزامنة Google Sheets</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Refresh Button -->
+          <button class="btn-icon" id="btn-refresh" title="تحديث الكروت من Google Sheets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button class="btn-icon" id="btn-theme" title="تبديل المظهر الليلي/النهاري">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <!-- Settings Button -->
+          <button class="btn-icon" id="btn-settings" title="إعدادات الربط مع Google Sheets">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Sync Status -->
+      <div class="status-bar">
+        <div class="status-badge status-offline" id="status-badge" title="اضغط لفتح إعدادات الربط">
+          <span class="status-indicator-dot"></span>
+          <span id="status-text">جارٍ التحقق من غوغل شيتس...</span>
+        </div>
+        <div class="status-sync-time" id="status-sync-time"></div>
+      </div>
+    </header>
+
+    <!-- Statistics Overview Ribbon -->
+    <section class="stats-ribbon">
+      <div class="stat-box">
+        <div class="stat-value" id="total-cards-count">0</div>
+        <div class="stat-label">إجمالي الكروت</div>
+      </div>
+      <div class="stat-box available">
+        <div class="stat-value" id="available-cards-count">0</div>
+        <div class="stat-label">المتاح للبيع</div>
+      </div>
+      <div class="stat-box sold">
+        <div class="stat-value" id="sold-cards-count">0</div>
+        <div class="stat-label">تم البيع</div>
+      </div>
+    </section>
+
+    <!-- Search & Filters Container -->
+    <section class="controls-section">
+      <!-- Search Input -->
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input 
+          type="search" 
+          id="search-query" 
+          class="search-input" 
+          placeholder="ابحث برقم الكرت، كلمة المرور، السعر، أو الصلاحية..."
+          autocomplete="off"
+        >
+        <button type="button" class="search-clear-btn" id="search-clear-btn" title="مسح البحث">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Price Chips Filter -->
+      <div class="chips-container" id="chips-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Status Tabs -->
+      <div class="filter-tabs">
+        <div class="tabs-group">
+          <button class="tab-btn active" data-status="available">المتاح فقط</button>
+          <button class="tab-btn" data-status="all">الكل</button>
+          <button class="tab-btn" data-status="sold">المباع</button>
+        </div>
+
+        <div class="cards-counter-label" id="cards-counter-label"></div>
+      </div>
+    </section>
+
+    <!-- Cards List Container -->
+    <main class="cards-list" id="cards-list">
+      <!-- Rendered dynamically -->
+    </main>
+
+    <!-- Load More Button -->
+    <button class="btn btn-secondary load-more-btn" id="load-more-btn" style="display: none;">
+      عرض المزيد من البطاقات
+    </button>
+
+  </div>
+
+  <!-- Hidden Canvas for HD Card Generation -->
+  <canvas id="render-canvas"></canvas>
+
+  <!-- Card Image Preview & Share Modal -->
+  <div class="modal-overlay" id="preview-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>🖼️ معاينة وتحميل بطاقة الكرت</span>
+        </div>
+        <button class="modal-close-btn" title="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Image Template Selector -->
+        <div class="image-template-bar">
+          <span class="image-template-label">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span>اختر قالب الصورة:</span>
+          </span>
+          <div class="template-switcher-group" id="image-template-switcher">
+            <button class="template-btn active" data-img-template="ticket" title="قالب قسيمة شحن وتذكرة شبكات فاخرة">
+              🎫 قسيمة شحن
+            </button>
+            <button class="template-btn" data-img-template="modern" title="قالب بطاقة رقمية عصرية">
+              💳 بطاقة عصرية
+            </button>
+            <button class="template-btn" data-img-template="royal" title="قالب بطاقة VIP الذهبية الملكية">
+              👑 ذهبية ملكية (VIP)
+            </button>
+            <button class="template-btn" data-img-template="neon" title="قالب سايبر نيون فائق السرعة والألعاب">
+              ⚡ سايبر نيون
+            </button>
+            <button class="template-btn" data-img-template="emerald" title="قالب زمردي كريستال فخم ومميز">
+              💎 زمردي كريستال
+            </button>
+            <button class="template-btn" data-img-template="crimson" title="قالب لهب بركاني فائق السرعة والألعاب">
+              🔥 لهب بركاني
+            </button>
+          </div>
+        </div>
+
+        <div class="image-preview-wrapper">
+          <img id="preview-img" alt="بطاقة كرت شبكة أسيل نت">
+          <p class="image-preview-hint">اضغط مطولاً على الصورة لحفظها مباشرة أو استخدم أزرار المشاركة والتحميل أدناه.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close-trigger">إغلاق</button>
+        <button class="btn btn-primary" id="btn-download-preview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>تحميل بجودة عالية (PNG)</span>
+        </button>
+        <button class="btn btn-primary" id="btn-share-preview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <span>مشاركة عبر واتساب</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Google Sheets Connection Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>⚙️ إعدادات المزامنة مع Google Sheets</span>
+        </div>
+        <button class="modal-close-btn" title="إغلاق">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <div class="form-group">
+          <label class="form-label" for="input-sheet-url">رابط ملف غوغل شيتس (Google Sheets URL)</label>
+          <div class="input-with-button">
+            <input 
+              type="url" 
+              id="input-sheet-url" 
+              class="form-input" 
+              placeholder="الصق رابط مشاركة الشيت هنا..."
+              dir="ltr"
+            >
+            <button class="btn btn-secondary" id="btn-test-sheet">فحص وتجربة</button>
+          </div>
+          <div class="form-hint" id="test-sheet-msg"></div>
+          <p class="form-hint">يدعم روابط المشاركة العادية، أو روابط النشر على الويب (CSV)، أو معرّف الشيت (Sheet ID).</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-network-name">اسم الشبكة</label>
+          <input type="text" id="input-network-name" class="form-input" value="أسيل نت">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="select-auto-refresh">التحديث التلقائي الدوري</label>
+          <select id="select-auto-refresh" class="form-select">
+            <option value="1">كل دقيقة (فوري)</option>
+            <option value="3" selected>كل 3 دقائق (موصى به)</option>
+            <option value="5">كل 5 دقائق</option>
+            <option value="15">كل 15 دقيقة</option>
+            <option value="0">يدوي فقط (عند الضغط على زر التحديث)</option>
+          </select>
+          <p class="form-hint">يقوم الكتالوج أيضاً بالتحديث تلقائياً بمجرد العودة إلى صفحة التطبيق.</p>
+        </div>
+
+        <!-- Illustrated Guide for Users -->
+        <div class="guide-box">
+          <h4>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            كيف تجعل ملف غوغل شيتس متاحاً للقراءة التلقائية؟
+          </h4>
+          <ol class="guide-steps">
+            <li>افتح جدول البيانات الخاص بك على <strong>Google Sheets</strong>.</li>
+            <li>اضغط على زر <strong>"مشاركة" (Share)</strong> في أعلى الزاوية.</li>
+            <li>تحت "الوصول العام" اختر: <strong>"أي شخص لديه الرابط"</strong> مع صلاحية <strong>"عارض" (Viewer)</strong>.</li>
+            <li>انسخ الرابط والصقه في الحقل أعلاه واضغط حفظ.</li>
+            <li><strong>ترتيب الأعمدة المتوقع:</strong> الشبكة | اسم المستخدم | كلمة المرور | السعر | الصلاحية | الرصيد | الحالة. (يتعرف النظام على الأعمدة تلقائياً حتى لو تغيّر ترتيبها).</li>
+          </ol>
+          <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btn-use-demo" style="font-size: 0.8rem; padding: 6px 10px;">
+              تجربة ببيانات نموذجية
+            </button>
+            <a 
+              href="https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/copy" 
+              target="_blank" 
+              class="btn btn-secondary" 
+              style="font-size: 0.8rem; padding: 6px 10px; text-decoration: none;"
+            >
+              نسخ نموذج شيت جاهز 📋
+            </a>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary modal-close-trigger">إلغاء</button>
+        <button class="btn btn-primary" id="btn-save-settings">حفظ ومزامنة الآن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Configuration & Scripts -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
