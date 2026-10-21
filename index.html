@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="dark">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>كتالوج أسيل نت - كروت وبطاقات الإنترنت الرقمية</title>
-  
+
   <!-- SEO & Social Meta Tags -->
-  <meta name="description" content="كتالوج وبطاقات شبكة أسيل نت للإنترنت اللاسلكي، متزامن تلقائياً وبشكل فوري مع Google Sheets ومستضاف على GitHub Pages.">
+  <meta name="description"
+    content="كتالوج وبطاقات شبكة أسيل نت للإنترنت اللاسلكي، متزامن تلقائياً وبشكل فوري مع Google Sheets ومستضاف على GitHub Pages.">
   <meta name="theme-color" content="#070d19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,21 +16,25 @@
   <!-- Google Fonts Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=5">
 </head>
+
 <body>
 
   <div class="app-container">
-    
+
     <!-- App Header -->
     <header class="app-header">
       <div class="header-top">
         <div class="brand-wrapper">
           <div class="brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
               <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
               <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
@@ -44,23 +50,28 @@
         <div class="header-actions">
           <!-- Refresh Button -->
           <button class="btn-icon" id="btn-refresh" title="تحديث الكروت من Google Sheets">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
             </svg>
           </button>
 
           <!-- Theme Toggle -->
           <button class="btn-icon" id="btn-theme" title="تبديل المظهر الليلي/النهاري">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
 
           <!-- Settings Button -->
           <button class="btn-icon" id="btn-settings" title="إعدادات الربط مع Google Sheets">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
               <circle cx="12" cy="12" r="3"></circle>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+              </path>
             </svg>
           </button>
         </div>
@@ -102,13 +113,8 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </span>
-        <input 
-          type="search" 
-          id="search-query" 
-          class="search-input" 
-          placeholder="ابحث برقم الكرت، كلمة المرور، السعر، أو الصلاحية..."
-          autocomplete="off"
-        >
+        <input type="search" id="search-query" class="search-input"
+          placeholder="ابحث برقم الكرت، كلمة المرور، السعر، أو الصلاحية..." autocomplete="off">
         <button type="button" class="search-clear-btn" id="search-clear-btn" title="مسح البحث">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -156,8 +162,8 @@
         <div class="modal-title">
           <span>🖼️ معاينة وتحميل بطاقة الكرت</span>
         </div>
-        <button class="modal-close-btn" title="إغلاق">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="modal-close-btn" title="إغلاق النافذة" aria-label="إغلاق النافذة">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
@@ -198,7 +204,8 @@
 
         <div class="image-preview-wrapper">
           <img id="preview-img" alt="بطاقة كرت شبكة أسيل نت">
-          <p class="image-preview-hint">اضغط مطولاً على الصورة لحفظها مباشرة أو استخدم أزرار المشاركة والتحميل أدناه.</p>
+          <p class="image-preview-hint">اضغط مطولاً على الصورة لحفظها مباشرة أو استخدم أزرار المشاركة والتحميل أدناه.
+          </p>
         </div>
       </div>
       <div class="modal-footer">
@@ -232,29 +239,34 @@
         <div class="modal-title">
           <span>⚙️ إعدادات المزامنة مع Google Sheets</span>
         </div>
-        <button class="modal-close-btn" title="إغلاق">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="modal-close-btn" title="إغلاق النافذة" aria-label="إغلاق النافذة">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
       <div class="modal-body">
-        
+
         <div class="form-group">
           <label class="form-label" for="input-sheet-url">رابط ملف غوغل شيتس (Google Sheets URL)</label>
           <div class="input-with-button">
-            <input 
-              type="url" 
-              id="input-sheet-url" 
-              class="form-input" 
-              placeholder="الصق رابط مشاركة الشيت هنا..."
-              dir="ltr"
-            >
+            <input type="url" id="input-sheet-url" class="form-input" placeholder="الصق رابط مشاركة الشيت هنا..."
+              dir="ltr">
             <button class="btn btn-secondary" id="btn-test-sheet">فحص وتجربة</button>
           </div>
           <div class="form-hint" id="test-sheet-msg"></div>
-          <p class="form-hint">يدعم روابط المشاركة العادية، أو روابط النشر على الويب (CSV)، أو معرّف الشيت (Sheet ID).</p>
+          <p class="form-hint">يدعم روابط المشاركة العادية، أو روابط النشر على الويب (CSV)، أو معرّف الشيت (Sheet ID).
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="input-script-url">رابط برمجة Google Apps Script (للتعديل وتحديث الشيت
+            تلقائياً)</label>
+          <input type="url" id="input-script-url" class="form-input"
+            placeholder="https://script.google.com/macros/s/.../exec" dir="ltr">
+          <p class="form-hint">لتسجيل البيع وتدوين تاريخ ووقت البيع في العامود التالي لعمود الحالة تلقائياً، أو حذفه عند
+            إرجاع الكرت للمتاح.</p>
         </div>
 
         <div class="form-group">
@@ -282,25 +294,25 @@
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            كيف تجعل ملف غوغل شيتس متاحاً للقراءة التلقائية؟
+            كيف تجعل ملف غوغل شيتس متزامناً بالكامل للقراءة والكتابة؟
           </h4>
           <ol class="guide-steps">
             <li>افتح جدول البيانات الخاص بك على <strong>Google Sheets</strong>.</li>
             <li>اضغط على زر <strong>"مشاركة" (Share)</strong> في أعلى الزاوية.</li>
-            <li>تحت "الوصول العام" اختر: <strong>"أي شخص لديه الرابط"</strong> مع صلاحية <strong>"عارض" (Viewer)</strong>.</li>
-            <li>انسخ الرابط والصقه في الحقل أعلاه واضغط حفظ.</li>
-            <li><strong>ترتيب الأعمدة المتوقع:</strong> الشبكة | اسم المستخدم | كلمة المرور | السعر | الصلاحية | الرصيد | الحالة. (يتعرف النظام على الأعمدة تلقائياً حتى لو تغيّر ترتيبها).</li>
+            <li>تحت "الوصول العام" اختر: <strong>"أي شخص لديه الرابط"</strong> مع صلاحية <strong>"عارض"
+                (Viewer)</strong> للقراءة.</li>
+            <li><strong>لتمكين البيع والتحديث التلقائي بالشيت:</strong> يتم نشر كود Apps Script كتطبيق ويب (Web App) في
+              الشيت مع صلاحية "أي شخص"، ثم وضع الرابط في خانة رابط السكربت أعلاه.</li>
+            <li><strong>تاريخ البيع:</strong> يتم تدوين تاريخ ووقت البيع في العامود الذي يلي الحالة مباشرة، ويُحذف
+              تلقائياً عند الضغط على إرجاع للمتاح.</li>
           </ol>
           <div style="margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn btn-secondary" id="btn-use-demo" style="font-size: 0.8rem; padding: 6px 10px;">
               تجربة ببيانات نموذجية
             </button>
-            <a 
-              href="https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/copy" 
-              target="_blank" 
-              class="btn btn-secondary" 
-              style="font-size: 0.8rem; padding: 6px 10px; text-decoration: none;"
-            >
+            <a href="https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/copy"
+              target="_blank" class="btn btn-secondary"
+              style="font-size: 0.8rem; padding: 6px 10px; text-decoration: none;">
               نسخ نموذج شيت جاهز 📋
             </a>
           </div>
@@ -318,7 +330,8 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Application Configuration & Scripts -->
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="app.js?v=5"></script>
 </body>
+
 </html>

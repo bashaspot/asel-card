@@ -13,6 +13,7 @@
   const STORAGE_KEY_CONFIG = 'aseel_catalog_config_v2';
   const STORAGE_KEY_CACHE = 'aseel_cards_cache_v2';
   const STORAGE_KEY_SOLD_LOCAL = 'aseel_sold_overrides_v2';
+  const STORAGE_KEY_SOLD_DATES = 'aseel_sold_dates_v2';
   const STORAGE_KEY_THEME = 'aseel_theme_v2';
   const STORAGE_KEY_IMG_TEMPLATE = 'aseel_img_template_v2';
 
@@ -21,6 +22,7 @@
     config: {
       networkName: (window.APP_CONFIG && window.APP_CONFIG.networkName) || DEFAULT_NET,
       sheetUrl: (window.APP_CONFIG && window.APP_CONFIG.defaultSheetUrl) || '',
+      scriptUrl: (window.APP_CONFIG && window.APP_CONFIG.scriptUrl) || '',
       autoRefresh: true,
       refreshIntervalMinutes: 3,
       currency: 'ل.س'
@@ -37,6 +39,7 @@
     lastSyncTime: null,
     syncTimer: null,
     soldOverrides: {}, // { [cardUser]: boolean }
+    soldDates: {}, // { [cardUser]: string (formatted date) }
     currentPreviewCard: null
   };
 
@@ -66,6 +69,7 @@
     btnSharePreview: document.getElementById('btn-share-preview'),
     // Settings inputs
     inputSheetUrl: document.getElementById('input-sheet-url'),
+    inputScriptUrl: document.getElementById('input-script-url'),
     inputNetworkName: document.getElementById('input-network-name'),
     selectAutoRefresh: document.getElementById('select-auto-refresh'),
     btnSaveSettings: document.getElementById('btn-save-settings'),
@@ -79,6 +83,7 @@
   function init() {
     loadSavedSettings();
     loadSoldOverrides();
+    loadSoldDates();
     applyTheme(getPreferredTheme());
     setupEventListeners();
     setupUrlParamsOverride();
@@ -138,7 +143,7 @@
       if (savedImgTpl && validTemplates.includes(savedImgTpl)) {
         state.imageTemplate = savedImgTpl;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // Synchronize image template switcher buttons active state
     document.querySelectorAll('.template-btn[data-img-template]').forEach(function (btn) {
@@ -172,7 +177,24 @@
   function saveSoldOverrides() {
     try {
       localStorage.setItem(STORAGE_KEY_SOLD_LOCAL, JSON.stringify(state.soldOverrides));
-    } catch (e) {}
+    } catch (e) { }
+  }
+
+  function loadSoldDates() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_SOLD_DATES);
+      if (saved) {
+        state.soldDates = JSON.parse(saved) || {};
+      }
+    } catch (e) {
+      state.soldDates = {};
+    }
+  }
+
+  function saveSoldDates() {
+    try {
+      localStorage.setItem(STORAGE_KEY_SOLD_DATES, JSON.stringify(state.soldDates));
+    } catch (e) { }
   }
 
   // --- Cache Persistence ---
@@ -189,7 +211,7 @@
           return true;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
     return false;
   }
 
@@ -202,7 +224,7 @@
           timestamp: new Date().toISOString()
         })
       );
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // --- Google Sheets URL Helpers & Resolver ---
@@ -391,7 +413,8 @@
       type: -1,
       valid: -1,
       bal: -1,
-      status: -1
+      status: -1,
+      soldDate: -1
     };
 
     if (headerRow) {
@@ -413,6 +436,8 @@
           colMap.bal = idx;
         } else if (colMap.status === -1 && /حال|وضع|status|state|sold/.test(c)) {
           colMap.status = idx;
+        } else if (colMap.soldDate === -1 && /تاريخ|وقت_بيع|تاريخ_البيع|تاريخ البيع|sold_date|soldat|date/.test(c)) {
+          colMap.soldDate = idx;
         }
       });
     }
@@ -433,6 +458,11 @@
       if (colMap.status === -1) colMap.status = 6;
     }
 
+    // If soldDate was not identified by name, it is the column right after status ("في العامود الذي يلي الحالة")
+    if (colMap.soldDate === -1 && colMap.status !== -1) {
+      colMap.soldDate = colMap.status + 1;
+    }
+
     const defaultNet = state.config.networkName || DEFAULT_NET;
 
     const cards = dataRows.map(function (row, index) {
@@ -442,6 +472,7 @@
 
       const userVal = getVal(colMap.user);
       const rawStatus = getVal(colMap.status).toLowerCase();
+      const rawSoldDate = getVal(colMap.soldDate);
 
       // Normalize status
       let status = 'متاح';
@@ -463,7 +494,8 @@
         type: getVal(colMap.type) || 'اشتراك',
         valid: getVal(colMap.valid),
         bal: getVal(colMap.bal),
-        status: status
+        status: status,
+        soldDate: rawSoldDate || ''
       };
     }).filter(function (card) {
       // Must have at least a username or code
@@ -647,7 +679,7 @@
           parsedCards = mapRowsToCards(rawRows);
           fetchError = null;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     state.isSyncing = false;
@@ -682,12 +714,12 @@
   function loadDemoCards() {
     const net = state.config.networkName || DEFAULT_NET;
     state.cards = [
-      { id: 'c1', net: net, user: 'w7531', pass: '4179', price: '100', rawPrice: '100', valid: '7 أيام', bal: '15 جيجا', status: 'متاح' },
-      { id: 'c2', net: net, user: 'w7532', pass: '8821', price: '100', rawPrice: '100', valid: '7 أيام', bal: '15 جيجا', status: 'متاح' },
-      { id: 'c3', net: net, user: 'k2041', pass: '8890', price: '50', rawPrice: '50', valid: '24 ساعة', bal: '5 جيجا', status: 'متاح' },
-      { id: 'c4', net: net, user: 'k2042', pass: '3312', price: '50', rawPrice: '50', valid: '24 ساعة', bal: '5 جيجا', status: 'متاح' },
-      { id: 'c5', net: net, user: 'm9011', pass: '7741', price: '200', rawPrice: '200', valid: '30 يوم', bal: '50 جيجا', status: 'متاح' },
-      { id: 'c6', net: net, user: 'm9012', pass: '6523', price: '200', rawPrice: '200', valid: '30 يوم', bal: '50 جيجا', status: 'مباع' }
+      { id: 'c1', net: net, user: 'w7531', pass: '4179', price: '100', rawPrice: '100', valid: '7 أيام', bal: '15 جيجا', status: 'متاح', soldDate: '' },
+      { id: 'c2', net: net, user: 'w7532', pass: '8821', price: '100', rawPrice: '100', valid: '7 أيام', bal: '15 جيجا', status: 'متاح', soldDate: '' },
+      { id: 'c3', net: net, user: 'k2041', pass: '8890', price: '50', rawPrice: '50', valid: '24 ساعة', bal: '5 جيجا', status: 'متاح', soldDate: '' },
+      { id: 'c4', net: net, user: 'k2042', pass: '3312', price: '50', rawPrice: '50', valid: '24 ساعة', bal: '5 جيجا', status: 'متاح', soldDate: '' },
+      { id: 'c5', net: net, user: 'm9011', pass: '7741', price: '200', rawPrice: '200', valid: '30 يوم', bal: '50 جيجا', status: 'متاح', soldDate: '' },
+      { id: 'c6', net: net, user: 'm9012', pass: '6523', price: '200', rawPrice: '200', valid: '30 يوم', bal: '50 جيجا', status: 'مباع', soldDate: '2026-10-21 14:30' }
     ];
     updateSyncStatus('offline', 'بيانات تجريبية (قم بربط ملف غوغل شيتس)');
     render();
@@ -744,6 +776,14 @@
       return state.soldOverrides[card.user] ? 'مباع' : 'متاح';
     }
     return card.status || 'متاح';
+  }
+
+  function getEffectiveSoldDate(card) {
+    if (getEffectiveStatus(card) !== 'مباع') return '';
+    if (state.soldDates[card.user] !== undefined) {
+      return state.soldDates[card.user];
+    }
+    return card.soldDate || '';
   }
 
   function getFilteredCards() {
@@ -837,6 +877,7 @@
       return a.localeCompare(b);
     });
 
+    const savedScrollLeft = elements.chipsContainer.scrollLeft;
     elements.chipsContainer.innerHTML = '';
 
     // "الكل" Chip
@@ -867,6 +908,9 @@
       };
       elements.chipsContainer.appendChild(chip);
     });
+
+    // Restore horizontal scroll position
+    elements.chipsContainer.scrollLeft = savedScrollLeft;
   }
 
   function renderCards() {
@@ -912,6 +956,7 @@
 
     visibleCards.forEach(function (card) {
       const isSold = getEffectiveStatus(card) === 'مباع';
+      const effectiveSoldDate = getEffectiveSoldDate(card);
       const cardEl = document.createElement('div');
       cardEl.className = 'card-item' + (isSold ? ' is-sold' : '');
 
@@ -981,6 +1026,17 @@
           <span class="meta-tag ${isSold ? 'status-sold' : 'status-available'}">
             ${isSold ? '🔴 تم البيع' : '🟢 متاح للبيع'}
           </span>
+          ${isSold && effectiveSoldDate ? `
+            <span class="meta-tag meta-tag-sold-date" title="تاريخ ووقت تسجيل البيع">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <span>بيع: ${escapeHTML(effectiveSoldDate)}</span>
+            </span>
+          ` : ''}
           ${card.valid ? `<span class="meta-tag">⏳ ${escapeHTML(card.valid)}</span>` : ''}
           ${card.bal ? `<span class="meta-tag">📊 ${escapeHTML(card.bal)}</span>` : ''}
         </div>
@@ -1074,18 +1130,86 @@
     elements.cardsList.innerHTML = html;
   }
 
-  // --- Toggle Sold Status (with Local Override) ---
+  // Helper: Format Current Date & Time (YYYY-MM-DD HH:mm)
+  function getCurrentSaleDateTime() {
+    const now = new Date();
+    const pad = function (n) { return String(n).padStart(2, '0'); };
+    const yyyy = now.getFullYear();
+    const mm = pad(now.getMonth() + 1);
+    const dd = pad(now.getDate());
+    const hh = pad(now.getHours());
+    const min = pad(now.getMinutes());
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+  }
+
+  // --- Sync Card Status & Sale Date Directly to Google Sheets ---
+  async function syncCardStatusToSheet(user, status, soldDate) {
+    const scriptUrl = state.config.scriptUrl || (window.APP_CONFIG && window.APP_CONFIG.scriptUrl);
+    if (!scriptUrl || !scriptUrl.trim()) {
+      return;
+    }
+
+    try {
+      const url = new URL(scriptUrl.trim());
+      url.searchParams.set('action', 'updateStatus');
+      url.searchParams.set('user', user);
+      url.searchParams.set('status', status);
+      url.searchParams.set('soldDate', soldDate || '');
+      url.searchParams.set('_t', Date.now());
+
+      await fetch(url.toString(), {
+        method: 'GET',
+        mode: 'no-cors',
+        cache: 'no-cache'
+      });
+      console.log(`[Google Sheets] Updated card ${user}: ${status} (date: ${soldDate})`);
+    } catch (err) {
+      console.warn('Failed to sync status to Google Sheet:', err);
+    }
+  }
+
+  // --- Mark Card As Sold (with date in column following status) ---
+  async function markCardAsSold(card, triggerSource) {
+    const saleDate = getCurrentSaleDateTime();
+    state.soldOverrides[card.user] = true;
+    state.soldDates[card.user] = saleDate;
+    card.status = 'مباع';
+    card.soldDate = saleDate;
+    saveSoldOverrides();
+    saveSoldDates();
+
+    syncCardStatusToSheet(card.user, 'مباع', saleDate);
+
+    const msg = triggerSource === 'share'
+      ? `تمت المشاركة واعتبار الكرت ${card.user} "مباع" وتدوين تاريخ البيع (${saleDate}) 📅`
+      : `تم تحديد الكرت ${card.user} كـ "مباع" وتدوين تاريخ البيع (${saleDate}) ✔️`;
+    showToast(msg, 'success');
+    render();
+  }
+
+  // --- Mark Card As Available (Delete sale date from sheet and site) ---
+  async function markCardAsAvailable(card) {
+    state.soldOverrides[card.user] = false;
+    delete state.soldDates[card.user];
+    card.status = 'متاح';
+    card.soldDate = '';
+    saveSoldOverrides();
+    saveSoldDates();
+
+    syncCardStatusToSheet(card.user, 'متاح', '');
+
+    showToast(`تم إرجاع الكرت ${card.user} إلى "متاح" وحذف تاريخ البيع ↩️`, 'info');
+    render();
+  }
+
+  // --- Toggle Sold Status ---
   function toggleCardSoldStatus(card) {
     const current = getEffectiveStatus(card);
-    const newStatusIsSold = (current !== 'مباع');
-    state.soldOverrides[card.user] = newStatusIsSold;
-    saveSoldOverrides();
-
-    showToast(
-      newStatusIsSold ? `تم تحديد الكرت ${card.user} كـ "مباع"` : `تم إرجاع الكرت ${card.user} إلى "متاح"`,
-      'info'
-    );
-    render();
+    if (current === 'مباع') {
+      markCardAsAvailable(card);
+    } else {
+      markCardAsSold(card, 'toggle');
+    }
   }
 
   // --- High-Resolution Canvas Card Drawing Engine ---
@@ -2393,6 +2517,13 @@
   // --- Share & Image Actions ---
   async function handleShareCard(card) {
     if (!elements.renderCanvas) return;
+
+    // Automatically mark card as SOLD and add sale date upon sharing (as requested)
+    const isAlreadySold = getEffectiveStatus(card) === 'مباع';
+    if (!isAlreadySold) {
+      await markCardAsSold(card, 'share');
+    }
+
     drawCardCanvas(card, elements.renderCanvas, state.imageTemplate || 'ticket');
 
     const netTitle = card.net || state.config.networkName || DEFAULT_NET;
@@ -2554,7 +2685,7 @@
     try {
       const saved = localStorage.getItem(STORAGE_KEY_THEME);
       if (saved) return saved;
-    } catch (e) {}
+    } catch (e) { }
     return 'dark'; // Dark luxury is default
   }
 
@@ -2562,7 +2693,7 @@
     document.documentElement.setAttribute('data-theme', theme);
     try {
       localStorage.setItem(STORAGE_KEY_THEME, theme);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function toggleTheme() {
@@ -2625,7 +2756,7 @@
         state.imageTemplate = tpl;
         try {
           localStorage.setItem(STORAGE_KEY_IMG_TEMPLATE, tpl);
-        } catch (e) {}
+        } catch (e) { }
         document.querySelectorAll('.template-btn[data-img-template]').forEach(function (b) {
           b.classList.toggle('active', b.getAttribute('data-img-template') === tpl);
         });
@@ -2642,6 +2773,19 @@
         state.page++;
         render();
       });
+    }
+
+    // Dynamic Cursor Spotlight on Cards (Linear / Vercel style)
+    if (elements.cardsList) {
+      elements.cardsList.addEventListener('mousemove', function (e) {
+        const card = e.target.closest('.card-item');
+        if (!card) return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      }, { passive: true });
     }
 
     // Header buttons
@@ -2727,6 +2871,7 @@
   function openSettingsModal() {
     if (!elements.settingsModal) return;
     if (elements.inputSheetUrl) elements.inputSheetUrl.value = state.config.sheetUrl || '';
+    if (elements.inputScriptUrl) elements.inputScriptUrl.value = state.config.scriptUrl || '';
     if (elements.inputNetworkName) elements.inputNetworkName.value = state.config.networkName || DEFAULT_NET;
     if (elements.selectAutoRefresh) elements.selectAutoRefresh.value = state.config.refreshIntervalMinutes || '3';
     if (elements.testSheetMsg) elements.testSheetMsg.textContent = '';
@@ -2803,6 +2948,7 @@
 
   function saveSettingsFromModal() {
     if (elements.inputSheetUrl) state.config.sheetUrl = elements.inputSheetUrl.value.trim();
+    if (elements.inputScriptUrl) state.config.scriptUrl = elements.inputScriptUrl.value.trim();
     if (elements.inputNetworkName) state.config.networkName = elements.inputNetworkName.value.trim() || DEFAULT_NET;
     if (elements.selectAutoRefresh) {
       const val = parseInt(elements.selectAutoRefresh.value, 10);
