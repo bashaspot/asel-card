@@ -1135,16 +1135,22 @@
     elements.cardsList.innerHTML = html;
   }
 
-  // Helper: Format Current Date & Time (YYYY-MM-DD HH:mm)
+  // Helper: Format Current Date & Time (YYYY-MM-DD hh:mm:ss ص/م)
   function getCurrentSaleDateTime() {
     const now = new Date();
     const pad = function (n) { return String(n).padStart(2, '0'); };
     const yyyy = now.getFullYear();
     const mm = pad(now.getMonth() + 1);
     const dd = pad(now.getDate());
-    const hh = pad(now.getHours());
+
+    let hours = now.getHours();
+    const period = hours >= 12 ? 'م' : 'ص';
+    hours = hours % 12 || 12; // الساعة 0 تصبح 12
+    const hh = pad(hours);
     const min = pad(now.getMinutes());
-    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    const sec = pad(now.getSeconds());
+
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}:${sec} ${period}`;
   }
 
   // --- Sync Card Status & Sale Date Directly to Google Sheets ---
