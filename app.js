@@ -106,14 +106,19 @@
     try {
       const urlParams = new URLSearchParams(window.location.search);
       const sheetParam = urlParams.get('sheet');
+      const scriptParam = urlParams.get('script') || urlParams.get('gas') || urlParams.get('scriptUrl');
       const netParam = urlParams.get('net');
 
       if (sheetParam) {
         state.config.sheetUrl = sheetParam.trim();
-        saveSettings();
+      }
+      if (scriptParam) {
+        state.config.scriptUrl = scriptParam.trim();
       }
       if (netParam) {
         state.config.networkName = netParam.trim();
+      }
+      if (sheetParam || scriptParam || netParam) {
         saveSettings();
       }
     } catch (e) {
