@@ -1039,7 +1039,7 @@
                 <line x1="8" y1="2" x2="8" y2="6"></line>
                 <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
-              <span>بيع: ${escapeHTML(effectiveSoldDate)}</span>
+              <span>بيع: <bdi dir="ltr">${escapeHTML(effectiveSoldDate)}</bdi></span>
             </span>
           ` : ''}
           ${card.valid ? `<span class="meta-tag">⏳ ${escapeHTML(card.valid)}</span>` : ''}
@@ -1144,7 +1144,7 @@
     const dd = pad(now.getDate());
 
     let hours = now.getHours();
-    const period = hours >= 12 ? 'م' : 'ص';
+    const period = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12 || 12; // الساعة 0 تصبح 12
     const hh = pad(hours);
     const min = pad(now.getMinutes());
